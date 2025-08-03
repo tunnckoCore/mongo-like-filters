@@ -2,6 +2,8 @@ old-source/
 packages/formidable-next/src/super-headers.js
 packages/formidable-next/src/super-readable-stream.js
 
+tsconfig.json
+
 .wrangler
 *.tsbuildinfo
 *.*cache
