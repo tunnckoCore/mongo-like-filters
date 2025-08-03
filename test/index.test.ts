@@ -4,10 +4,10 @@ import { matches, mongoPath } from '../src/index.ts';
 import {
   company,
   products,
-  User,
   users,
   type Company,
   type Employee,
+  type User,
   type UserWithMetadata,
 } from './fake-data.ts';
 
@@ -593,7 +593,7 @@ describe('Edge Cases and Error Handling', () => {
   test('should throw error for invalid _not usage', () => {
     expect(() => {
       // @ts-expect-error bruh, it's expected to type-error
-      matches({ bruh: 'invalid' }, users[0] as User);
+      matches({ _not: 'invalid' }, users[0] as User);
     }).toThrow('_not needs a regex or a document');
   });
 });

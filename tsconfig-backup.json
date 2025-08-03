@@ -1,0 +1,9 @@
+{
+  "extends": "eslint-config-xaxa/tsconfig.json",
+  "compilerOptions": {
+    "types": ["bun"],
+    "skipLibCheck": true
+  },
+  "include": ["test"],
+  "exclude": ["node_modules", "dist"]
+}
