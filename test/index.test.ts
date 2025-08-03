@@ -1,11 +1,10 @@
-/* eslint-disable complexity, max-statements, guard-for-in, style/indent-binary-ops, no-restricted-syntax, style/indent, style/quote-props, style/quotes, max-nested-callbacks */
-
 import { describe, expect, test } from 'bun:test';
 
-import { matches, mongoPath } from '../index.ts';
+import { matches, mongoPath } from '../src/index.ts';
 import {
   company,
   products,
+  User,
   users,
   type Company,
   type Employee,
@@ -593,7 +592,8 @@ describe('Edge Cases and Error Handling', () => {
 
   test('should throw error for invalid _not usage', () => {
     expect(() => {
-      matches({ _not: 'invalid' }, users[0]);
+      // @ts-expect-error bruh, it's expected to type-error
+      matches({ bruh: 'invalid' }, users[0] as User);
     }).toThrow('_not needs a regex or a document');
   });
 });
