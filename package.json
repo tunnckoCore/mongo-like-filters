@@ -1,28 +1,31 @@
 {
   "name": "mongo-like-filters",
   "version": "0.1.0",
-  "type": "module",
   "license": "MPL-2.0",
+  "description": "A lightweight TypeScript library with full type-safety for filtering objects using MongoDB-style query syntax",
+  "type": "module",
   "module": "src/index.ts",
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "test": "bun test",
-    "check": "tsc --noEmit --allowImportingTsExtensions test/examples.ts"
+    "check": "tsc --noEmit --allowImportingTsExtensions test/examples.ts",
+    "test": "bun test"
+  },
+  "resolutions": {
+    "@types/glob": "8.1.0",
+    "@types/minimatch": "5.1.2",
+    "minimatch": "5.1.2"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.5.1",
     "@types/minimatch": "5.1.2",
-    "bun-types": "^1.2.19",
+    "bun-types": "latest",
     "eslint": "^9.27.0",
     "eslint-config-xaxa": "^28",
     "prettier": "^3.5.3",
     "prettier-plugin-pkgjson": "^0.3.0",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "^5.9.2"
-  },
-  "resolutions": {
-    "@types/glob": "8.1.0",
-    "minimatch": "5.1.2",
-    "@types/minimatch": "5.1.2"
-  },
-  "private": true
+  }
 }

@@ -1,8 +1,8 @@
 # mongo-like-filters
 
-A lightweight, type-safe JavaScript/TypeScript library for filtering objects using MongoDB-style
-query syntax. Perfect for client-side filtering, in-memory data processing, and anywhere you need
-powerful object querying without a database.
+A lightweight, type-safe TypeScript library for filtering objects using MongoDB-style query syntax.
+Perfect for client-side filtering, in-memory data processing, and anywhere you need powerful object
+querying without a database.
 
 ## ✨ Features
 

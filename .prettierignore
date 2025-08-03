@@ -2,12 +2,6 @@ old-source/
 packages/formidable-next/src/super-headers.js
 packages/formidable-next/src/super-readable-stream.js
 
-# because we use ESLint for most things - both linting and formatting (with ESLint Stylistic)
-**/*.{js,jsx,ts,tsx}
-**/tsconfig*.json
-**/tsconfig.*.json
-**/package.json
-
 .wrangler
 *.tsbuildinfo
 *.*cache

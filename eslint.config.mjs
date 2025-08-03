@@ -1,4 +1,3 @@
-
 import xaxa from 'eslint-config-xaxa';
 
 // eslint.config.ts
