@@ -397,25 +397,8 @@ function testExpression(expr: any, value: any): boolean {
     return false;
   }
 
-  if (expr._size !== undefined) {
-    const size = getSize(value);
-
-    // If _size is a number, treat it as _eq (alias)
-    if (typeof expr._size === 'number') {
-      if (size !== expr._size) {
-        return false;
-      }
-    } else if (typeof expr._size === 'object' && expr._size !== null) {
-      // Handle nested operators within _size
-      if (!testExpression(expr._size, size)) {
-        return false;
-      }
-    } else {
-      // Fallback for other types - treat as equality
-      if (size !== expr._size) {
-        return false;
-      }
-    }
+  if (expr._size !== undefined && getSize(value) !== expr._size) {
+    return false;
   }
 
   return true;

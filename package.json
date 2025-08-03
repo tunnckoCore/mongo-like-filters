@@ -1,6 +1,6 @@
 {
   "name": "mongo-like-filters",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MPL-2.0",
   "description": "A lightweight TypeScript library with full type-safety for filtering objects using MongoDB-style query syntax",
   "homepage": "https://github.com/tunnckoCore/mongo-like-filters",

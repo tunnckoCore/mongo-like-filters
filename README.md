@@ -232,6 +232,11 @@ matches({ tags: { _size: 0 } }, user); // true
 matches({ roles: { _size: { _gt: 1 } } }, user); // true
 matches({ roles: { _size: { _gte: 2 } } }, user); // true
 matches({ roles: { _size: { _lt: 5 } } }, user); // true
+
+// for arrays, you can skip the _size operator
+matches({ roles: { _gt: 1 } }, user); // true
+matches({ roles: { _gte: 2 } }, user); // true
+matches({ roles: { _lt: 5 } }, user); // true
 ```
 
 #### String Length

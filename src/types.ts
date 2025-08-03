@@ -175,7 +175,7 @@ type FilterValueForType<T> =
           readonly _istartsWith?: string;
           readonly _iendsWith?: string;
           readonly _regex?: string;
-          readonly _size?: number;
+          readonly _size?: number | OperatorsForType<number>;
         }
       : never)
   | (T extends number
@@ -198,7 +198,7 @@ type FilterValueForType<T> =
       ?
           | T[number]
           | {
-              readonly _size?: number;
+              readonly _size?: number | OperatorsForType<number>;
               readonly _elemMatch?: T extends (infer U)[] ? FilterExpression<U> : never;
               readonly _gt?: number;
               readonly _gte?: number;
@@ -212,7 +212,7 @@ type FilterValueForType<T> =
       ?
           | Partial<FilterExpression<T>>
           | {
-              readonly _size?: number;
+              readonly _size?: number | OperatorsForType<number>;
             }
       : never);
 

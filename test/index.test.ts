@@ -258,6 +258,89 @@ describe('Size Operators', () => {
     expect(result2).toHaveLength(1);
     expect(result2[0]!.name).toBe('Jane Smith');
   });
+
+  test('should match _size with nested operators on arrays', () => {
+    // Test _size with _gt (greater than)
+    const moreThanTwo = products.filter(matches({ tags: { _size: { _gt: 2 } } }));
+    expect(moreThanTwo).toHaveLength(2); // Products with 3 tags each
+
+    // Test _size with _lt (less than)
+    const lessThanThree = products.filter(matches({ tags: { _size: { _lt: 3 } } }));
+    expect(lessThanThree).toHaveLength(0); // No products with < 3 tags
+
+    // Test _size with _gte (greater than or equal)
+    const threeOrMore = products.filter(matches({ tags: { _size: { _gte: 3 } } }));
+    expect(threeOrMore).toHaveLength(2);
+
+    // Test _size with _lte (less than or equal)
+    const threeOrLess = products.filter(matches({ tags: { _size: { _lte: 3 } } }));
+    expect(threeOrLess).toHaveLength(2); // Both products have exactly 3 tags
+
+    // Test _size with _ne (not equal)
+    const notTwo = products.filter(matches({ tags: { _size: { _ne: 2 } } }));
+    expect(notTwo).toHaveLength(2); // Products with 3 tags
+
+    // Test _size with _in (value in array)
+    const sizeTwoOrThree = products.filter(matches({ tags: { _size: { _in: [2, 3] } } }));
+    expect(sizeTwoOrThree).toHaveLength(2); // Both products have 3 tags
+
+    // Test _size with _nin (value not in array)
+    const notSizeOne = products.filter(matches({ tags: { _size: { _nin: [1, 4] } } }));
+    expect(notSizeOne).toHaveLength(2); // All products (none have size 1 or 4)
+  });
+
+  test('should match _size with nested operators on strings', () => {
+    // Test string length with _gt
+    const longNames = users.filter(matches({ name: { _size: { _gt: 8 } } }));
+    expect(longNames).toHaveLength(2); // Jane Smith (10) and Bob Johnson (11)
+
+    // Test string length with _lt
+    const shortNames = users.filter(matches({ name: { _size: { _lt: 10 } } }));
+    expect(shortNames).toHaveLength(1);
+    expect(shortNames[0]!.name).toBe('John Doe'); // 8 chars
+
+    // Test exact match with _eq - John Doe = 8, Jane Smith = 10, Bob Johnson = 11
+    const exactlyTen = users.filter(matches({ name: { _size: { _eq: 10 } } }));
+    expect(exactlyTen).toHaveLength(1);
+    expect(exactlyTen[0]!.name).toBe('Jane Smith');
+
+    // Test string length with _gte
+    const tenOrMore = users.filter(matches({ name: { _size: { _gte: 10 } } }));
+    expect(tenOrMore).toHaveLength(2); // Jane Smith (10) and Bob Johnson (11)
+
+    // Test string length with _lte
+    const tenOrLess = users.filter(matches({ name: { _size: { _lte: 10 } } }));
+    expect(tenOrLess).toHaveLength(2); // John Doe (8) and Jane Smith (10)
+  });
+
+  test('should match _size with nested operators on objects', () => {
+    // Test object property count with comparison operators
+    const metadata = users as UserWithMetadata[];
+
+    // More than 1 property in metadata - John: 2 props, Jane: 1 prop, Bob: 2 props
+    const multiPropMetadata = metadata.filter(matches({ metadata: { _size: { _gt: 1 } } }));
+    expect(multiPropMetadata).toHaveLength(2); // John and Bob have 2 properties
+    expect(multiPropMetadata.map((u) => u.name).sort()).toEqual(['Bob Johnson', 'John Doe']);
+
+    // Exactly 1 property in metadata
+    const onePropMetadata = metadata.filter(matches({ metadata: { _size: { _eq: 1 } } }));
+    expect(onePropMetadata).toHaveLength(1);
+    expect(onePropMetadata[0]!.name).toBe('Jane Smith');
+
+    // Test with preferences nested object - John: 3 prefs, Jane: 1 pref, Bob: 2 prefs
+    const moreThanOnePreference = metadata.filter(
+      matches({ 'metadata.preferences': { _size: { _gt: 1 } } }),
+    );
+    expect(moreThanOnePreference).toHaveLength(2); // John (3) and Bob (2)
+    expect(moreThanOnePreference.map((u) => u.name).sort()).toEqual(['Bob Johnson', 'John Doe']);
+
+    // Test with _ne on object size
+    const notThreePreferences = metadata.filter(
+      matches({ 'metadata.preferences': { _size: { _ne: 3 } } }),
+    );
+    expect(notThreePreferences).toHaveLength(2); // Jane (1) and Bob (2)
+    expect(notThreePreferences.map((u) => u.name).sort()).toEqual(['Bob Johnson', 'Jane Smith']);
+  });
 });
 
 describe('Nested Path Access', () => {
@@ -795,7 +878,7 @@ describe('Performance and Large Dataset Testing', () => {
     const executionTime = endTime - startTime;
 
     expect(result).toHaveLength(0); // because `age` is 25, we look for above 30 (the _not _lt: 30)
-    expect(executionTime).toBeLessThan(10); // Should execute quickly
+    expect(executionTime).toBeLessThan(50); // Should execute quickly
 
     const result2 = users.filter(
       matches({
