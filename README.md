@@ -116,7 +116,6 @@ matches({ createdAt: { _gt: new Date('2024-01-01') } }, user);
 ```typescript
 // Contains substring
 matches({ email: { _contains: 'gmail' } }, user);
-matches({ email: { _includes: 'gmail' } }, user); // Alias for _contains
 
 // Starts with
 matches({ name: { _startsWith: 'J' } }, user);
