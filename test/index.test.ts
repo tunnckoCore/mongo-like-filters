@@ -556,6 +556,15 @@ describe('Currying Support', () => {
 });
 
 describe('Edge Cases and Error Handling', () => {
+  test('should handle unknown props and null/undefined values', () => {
+    const user = { name: 'John', age: null, bio: undefined };
+
+    expect(matches({ bruh: null }, user as any)).toBe(false);
+    expect(matches({ age: { _exists: true } }, user as any)).toBe(false);
+    expect(matches({ bio: { _exists: false } }, user)).toBe(true);
+    expect(matches({ bio: { _exists: true } }, user)).toBe(false);
+    expect(matches({ missing: { _exists: false } }, user as any)).toBe(true);
+  });
   test('should handle null/undefined values gracefully', () => {
     const testData = [
       { id: 1, name: 'Test1', value: null },

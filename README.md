@@ -473,6 +473,9 @@ const user = { roles: ['user', 'admin'] };
 matches({ roles: 'admin' }, user); // true - contains "admin"
 matches({ roles: { _eq: ['user', 'admin'] } }, user); // true - exact array match
 matches({ roles: { _eq: ['admin', 'user'] } }, user); // false - different order
+matches({ roles: { _in: ['user', 'admin'] } }, user); // true - contains any of the elements
+matches({ roles: { _size: 2 } }, user); // true - array size matches
+matches({ 'roles.0': { _eq: 'user' } }}, user) // true - first element matches
 ```
 
 ### Null and Undefined Handling
@@ -480,7 +483,9 @@ matches({ roles: { _eq: ['admin', 'user'] } }, user); // false - different order
 ```typescript
 const user = { name: 'John', age: null, bio: undefined };
 
-matches({ age: null }, user); // true
+matches({ age: null }, user); // true, exact match
+matches({ age: { _exists: true } }, user); // false, `null` and `undefined` are not considered as existing values
+matches({ age: { _exists: false } }, user); // true
 matches({ bio: { _exists: false } }, user); // true
 matches({ bio: { _exists: true } }, user); // false
 matches({ missing: { _exists: false } }, user); // true

@@ -173,7 +173,7 @@ function matchesInternal(expression: any, data: any, extractor: Extractor = getA
 }
 
 function testExpression(expr: any, value: any): boolean {
-  if (typeof expr !== 'object' || expr instanceof Date) {
+  if (typeof expr !== 'object' || expr === null || expr instanceof Date) {
     if (Array.isArray(value)) {
       return value.some((v) => isEqual(v, expr));
     }
