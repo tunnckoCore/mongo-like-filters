@@ -21,41 +21,35 @@ A lightweight, type-safe JavaScript/TypeScript library for filtering objects usi
 npm install mongo-like-filters
 ```
 
-```bash
-yarn add mongo-like-filters
-```
-
-```bash
-pnpm add mongo-like-filters
-```
-
 ## 🚀 Quick Start
 
 ```typescript
-import { matches } from 'mongo-like-filters';
+import { matches } from "mongo-like-filters";
 
 const users = [
   { name: "John", age: 30, roles: ["admin"] },
   { name: "Jane", age: 25, roles: ["user"] },
-  { name: "Bob", age: 35, roles: ["user", "moderator"] }
+  { name: "Bob", age: 35, roles: ["user", "moderator"] },
 ];
 
 // Simple equality
-const johns = users.filter(user => matches({ name: "John" }, user));
+const johns = users.filter((user) => matches({ name: "John" }, user));
 
 // Comparison operators
-const adults = users.filter(user => matches({ age: { _gte: 30 } }, user));
+const adults = users.filter((user) => matches({ age: { _gte: 30 } }, user));
 
 // Array operations
-const admins = users.filter(user => matches({ roles: "admin" }, user));
+const admins = users.filter((user) => matches({ roles: "admin" }, user));
 
 // Complex queries
-const seniorUsers = users.filter(user => matches({
-  _and: [
-    { age: { _gt: 25 } },
-    { roles: { _in: ["user", "moderator"] } }
-  ]
-}, user));
+const seniorUsers = users.filter((user) =>
+  matches(
+    {
+      _and: [{ age: { _gt: 25 } }, { roles: { _in: ["user", "moderator"] } }],
+    },
+    user,
+  ),
+);
 ```
 
 ## 📖 API Reference
@@ -65,6 +59,7 @@ const seniorUsers = users.filter(user => matches({
 Main function to test if a record matches the given filter expression.
 
 **Parameters:**
+
 - `expression`: Filter expression object
 - `record`: Object to test against
 - `extractor?`: Optional custom field extractor function
@@ -78,37 +73,37 @@ TypeScript interface defining all available operators:
 ```typescript
 interface FilterExpression {
   // Comparison operators
-  _eq?: any;           // Equal to
-  _ne?: any;           // Not equal to
-  _gt?: any;           // Greater than
-  _gte?: any;          // Greater than or equal
-  _lt?: any;           // Less than
-  _lte?: any;          // Less than or equal
-  
+  _eq?: any; // Equal to
+  _ne?: any; // Not equal to
+  _gt?: any; // Greater than
+  _gte?: any; // Greater than or equal
+  _lt?: any; // Less than
+  _lte?: any; // Less than or equal
+
   // Array operators
-  _in?: any[];         // Value in array
-  _nin?: any[];        // Value not in array
-  _size?: number;      // Array/string/object size
-  
+  _in?: any[]; // Value in array
+  _nin?: any[]; // Value not in array
+  _size?: number; // Array/string/object size
+
   // String operators
-  _contains?: string;  // Contains substring
-  _includes?: string;  // Contains substring (alias)
+  _contains?: string; // Contains substring
+  _includes?: string; // Contains substring (alias)
   _startsWith?: string; // Starts with string
-  _endsWith?: string;   // Ends with string
-  _icontains?: string;  // Case-insensitive contains
+  _endsWith?: string; // Ends with string
+  _icontains?: string; // Case-insensitive contains
   _istartsWith?: string; // Case-insensitive starts with
-  _iendsWith?: string;   // Case-insensitive ends with
-  _regex?: string;      // Regular expression match
-  
+  _iendsWith?: string; // Case-insensitive ends with
+  _regex?: string; // Regular expression match
+
   // Logical operators
   _and?: FilterExpression[]; // Logical AND
-  _or?: FilterExpression[];  // Logical OR
-  _not?: FilterExpression;   // Logical NOT
-  
+  _or?: FilterExpression[]; // Logical OR
+  _not?: FilterExpression; // Logical NOT
+
   // Existence and special operators
-  _exists?: boolean;    // Field exists/doesn't exist
+  _exists?: boolean; // Field exists/doesn't exist
   _elemMatch?: FilterExpression; // Array element matching
-  
+
   // Dynamic properties
   [key: string]: any;
 }
@@ -120,138 +115,147 @@ interface FilterExpression {
 
 ```typescript
 // Equal to
-matches({ age: 30 }, user)
-matches({ age: { _eq: 30 } }, user)
+matches({ age: 30 }, user);
+matches({ age: { _eq: 30 } }, user);
 
 // Comparisons
-matches({ age: { _gt: 25 } }, user)        // Greater than
-matches({ age: { _gte: 30 } }, user)       // Greater than or equal
-matches({ age: { _lt: 40 } }, user)        // Less than
-matches({ age: { _lte: 35 } }, user)       // Less than or equal
-matches({ name: { _ne: "John" } }, user)   // Not equal
+matches({ age: { _gt: 25 } }, user); // Greater than
+matches({ age: { _gte: 30 } }, user); // Greater than or equal
+matches({ age: { _lt: 40 } }, user); // Less than
+matches({ age: { _lte: 35 } }, user); // Less than or equal
+matches({ name: { _ne: "John" } }, user); // Not equal
 ```
 
 ### String Operators
 
 ```typescript
 // Case-sensitive
-matches({ email: { _contains: "gmail" } }, user)
-matches({ email: { _includes: "gmail" } }, user)  // Alias for _contains
-matches({ name: { _startsWith: "J" } }, user)
-matches({ name: { _endsWith: "son" } }, user)
+matches({ email: { _contains: "gmail" } }, user);
+matches({ email: { _includes: "gmail" } }, user); // Alias for _contains
+matches({ name: { _startsWith: "J" } }, user);
+matches({ name: { _endsWith: "son" } }, user);
 
 // Case-insensitive
-matches({ email: { _icontains: "GMAIL" } }, user)
-matches({ name: { _istartsWith: "j" } }, user)
-matches({ name: { _iendsWith: "SON" } }, user)
+matches({ email: { _icontains: "GMAIL" } }, user);
+matches({ name: { _istartsWith: "j" } }, user);
+matches({ name: { _iendsWith: "SON" } }, user);
 
 // Regular expressions
-matches({ email: { _regex: "^[a-z]+@gmail\\.com$" } }, user)
+matches({ email: { _regex: "^[a-z]+@gmail\\.com$" } }, user);
 ```
 
 ### Array Operators
 
 ```typescript
 // Value in/not in array
-matches({ status: { _in: ["active", "pending"] } }, user)
-matches({ status: { _nin: ["deleted", "banned"] } }, user)
+matches({ status: { _in: ["active", "pending"] } }, user);
+matches({ status: { _nin: ["deleted", "banned"] } }, user);
 
 // Array contains value
-matches({ roles: "admin" }, user)
+matches({ roles: "admin" }, user);
 
 // Array size
-matches({ roles: { _size: 2 } }, user)
-matches({ skills: { _size: { _gt: 3 } } }, user)
+matches({ roles: { _size: 2 } }, user);
+matches({ skills: { _size: { _gt: 3 } } }, user);
 
 // Element matching
-matches({ 
-  projects: { _elemMatch: { status: "active" } } 
-}, user)
+matches(
+  {
+    projects: { _elemMatch: { status: "active" } },
+  },
+  user,
+);
 ```
 
 ### Nested Objects & Dot Notation
 
 ```typescript
 // Nested properties
-matches({ "profile.location.city": "New York" }, user)
-matches({ "settings.theme": "dark" }, user)
+matches({ "profile.location.city": "New York" }, user);
+matches({ "settings.theme": "dark" }, user);
 
 // Array index access
-matches({ "skills.0": "JavaScript" }, user)
-matches({ "projects.1.status": "completed" }, user)
-matches({ "history.0.action": "login" }, user)
+matches({ "skills.0": "JavaScript" }, user);
+matches({ "projects.1.status": "completed" }, user);
+matches({ "history.0.action": "login" }, user);
 ```
 
 ### Logical Operators
 
 ```typescript
 // AND operation
-matches({
-  _and: [
-    { age: { _gte: 25 } },
-    { status: "active" }
-  ]
-}, user)
+matches(
+  {
+    _and: [{ age: { _gte: 25 } }, { status: "active" }],
+  },
+  user,
+);
 
 // OR operation
-matches({
-  _or: [
-    { role: "admin" },
-    { permissions: { _contains: "write" } }
-  ]
-}, user)
+matches(
+  {
+    _or: [{ role: "admin" }, { permissions: { _contains: "write" } }],
+  },
+  user,
+);
 
 // NOT operation
-matches({
-  _not: { status: "deleted" }
-}, user)
+matches(
+  {
+    _not: { status: "deleted" },
+  },
+  user,
+);
 
 // Complex combinations
-matches({
-  _and: [
-    { age: { _gt: 18 } },
-    {
-      _or: [
-        { role: "admin" },
-        { verified: true }
-      ]
-    }
-  ]
-}, user)
+matches(
+  {
+    _and: [
+      { age: { _gt: 18 } },
+      {
+        _or: [{ role: "admin" }, { verified: true }],
+      },
+    ],
+  },
+  user,
+);
 ```
 
 ### Existence Checks
 
 ```typescript
 // Field exists
-matches({ "profile.bio": { _exists: true } }, user)
+matches({ "profile.bio": { _exists: true } }, user);
 
 // Field doesn't exist
-matches({ "deletedAt": { _exists: false } }, user)
+matches({ deletedAt: { _exists: false } }, user);
 ```
 
 ### Date Operations
 
 ```typescript
-const user = { 
-  createdAt: new Date('2025-01-15'),
-  lastLogin: new Date('2025-07-30')
+const user = {
+  createdAt: new Date("2025-01-15"),
+  lastLogin: new Date("2025-07-30"),
 };
 
 // Date equality
-matches({ createdAt: new Date('2025-01-15') }, user)
+matches({ createdAt: new Date("2025-01-15") }, user);
 
 // Date comparisons
-matches({ createdAt: { _gt: new Date('2024-12-01') } }, user)
-matches({ lastLogin: { _lt: new Date() } }, user)
+matches({ createdAt: { _gt: new Date("2024-12-01") } }, user);
+matches({ lastLogin: { _lt: new Date() } }, user);
 
 // Date ranges
-matches({
-  _and: [
-    { createdAt: { _gte: new Date('2025-01-01') } },
-    { createdAt: { _lt: new Date('2026-01-01') } }
-  ]
-}, user)
+matches(
+  {
+    _and: [
+      { createdAt: { _gte: new Date("2025-01-01") } },
+      { createdAt: { _lt: new Date("2026-01-01") } },
+    ],
+  },
+  user,
+);
 ```
 
 ## 🔧 Advanced Usage
@@ -264,7 +268,7 @@ Customize how fields are extracted from objects:
 // Case-insensitive field extraction
 const caseInsensitiveExtractor = (obj: any, key: string) => {
   const value = obj[key];
-  return typeof value === 'string' ? value.toLowerCase() : value;
+  return typeof value === "string" ? value.toLowerCase() : value;
 };
 
 matches({ name: "john doe" }, user, caseInsensitiveExtractor);
@@ -280,19 +284,25 @@ const customExtractor = (obj: any, key: string) => {
 
 ```typescript
 // These are equivalent
-matches({
-  age: { _gte: 25 },
-  status: "active",
-  role: { _in: ["user", "admin"] }
-}, user)
+matches(
+  {
+    age: { _gte: 25 },
+    status: "active",
+    role: { _in: ["user", "admin"] },
+  },
+  user,
+);
 
-matches({
-  _and: [
-    { age: { _gte: 25 } },
-    { status: "active" },
-    { role: { _in: ["user", "admin"] } }
-  ]
-}, user)
+matches(
+  {
+    _and: [
+      { age: { _gte: 25 } },
+      { status: "active" },
+      { role: { _in: ["user", "admin"] } },
+    ],
+  },
+  user,
+);
 ```
 
 ### Working with Arrays of Objects
@@ -303,21 +313,24 @@ const data = [
     name: "Project Alpha",
     tasks: [
       { title: "Setup", completed: true },
-      { title: "Development", completed: false }
-    ]
-  }
+      { title: "Development", completed: false },
+    ],
+  },
 ];
 
 // Find projects with completed tasks
-const result = data.filter(project => 
-  matches({
-    tasks: { _elemMatch: { completed: true } }
-  }, project)
+const result = data.filter((project) =>
+  matches(
+    {
+      tasks: { _elemMatch: { completed: true } },
+    },
+    project,
+  ),
 );
 
 // Access specific array elements
-matches({ "tasks.0.completed": true }, project)
-matches({ "tasks.1.title": { _contains: "Dev" } }, project)
+matches({ "tasks.0.completed": true }, project);
+matches({ "tasks.1.title": { _contains: "Dev" } }, project);
 ```
 
 ## 🐛 Error Handling
@@ -325,13 +338,13 @@ matches({ "tasks.1.title": { _contains: "Dev" } }, project)
 The library throws `FilterError` for invalid expressions:
 
 ```typescript
-import { FilterError } from 'mongo-like-filters';
+import { FilterError } from "mongo-like-filters";
 
 try {
   matches({ _and: [], _or: [] }, user); // Invalid: both _and and _or
 } catch (error) {
   if (error instanceof FilterError) {
-    console.log('Filter error:', error.message);
+    console.log("Filter error:", error.message);
   }
 }
 ```
