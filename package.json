@@ -1,6 +1,6 @@
 {
   "name": "mongo-like-filters",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "MPL-2.0",
   "description": "A lightweight TypeScript library with full type-safety for filtering objects using MongoDB-style query syntax",
   "homepage": "https://github.com/tunnckoCore/mongo-like-filters",
@@ -14,7 +14,9 @@
     "src"
   ],
   "scripts": {
+    "build": "tsdown src/index.ts --dts --format esm --target esnext",
     "check": "tsc --noEmit --allowImportingTsExtensions test/examples.ts",
+    "prepublishOnly": "bun run test && bun run build",
     "test": "bun test"
   },
   "resolutions": {
@@ -31,6 +33,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-pkgjson": "^0.3.0",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "typescript": "^5.9.2"
+    "tsdown": "^0.15.6",
+    "typescript": "^5.9.3"
   }
 }
